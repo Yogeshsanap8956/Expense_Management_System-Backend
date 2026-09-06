@@ -168,6 +168,19 @@ class MahaprasadCreate(BaseModel):
     distribution_time: Optional[str] = None
 
 
+class MahaprasadUpdate(BaseModel):
+    menu: Optional[str] = None
+    expected_people: Optional[int] = None
+    food_quantity: Optional[str] = None
+    cooking_team: Optional[str] = None
+    serving_team: Optional[str] = None
+    volunteers: Optional[str] = None
+    vendor: Optional[str] = None
+    food_budget: Optional[float] = None
+    actual_cost: Optional[float] = None
+    distribution_time: Optional[str] = None
+
+
 class InventoryCreate(BaseModel):
     name: str
     total_quantity: int
