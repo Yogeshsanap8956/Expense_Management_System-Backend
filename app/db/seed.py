@@ -141,3 +141,19 @@ def seed_if_empty(db: Session) -> None:
         ]
     )
     db.commit()
+
+
+def ensure_festival_aarti_slots(db: Session) -> None:
+    extras = [
+        (date(2026, 9, 7), time(6, 30), time(19, 30)),
+        (date(2026, 9, 8), time(6, 30), time(19, 30)),
+    ]
+    changed = False
+    for slot_date, morning, evening in extras:
+        if db.query(AartiSlot).filter(AartiSlot.slot_date == slot_date).first():
+            continue
+        db.add(AartiSlot(slot_date=slot_date, session=AartiSession.MORNING, start_time=morning))
+        db.add(AartiSlot(slot_date=slot_date, session=AartiSession.EVENING, start_time=evening))
+        changed = True
+    if changed:
+        db.commit()
