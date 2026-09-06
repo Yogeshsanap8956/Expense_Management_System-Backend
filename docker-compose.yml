@@ -1,0 +1,21 @@
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run
+    depends_on:
+      - api
+    profiles:
+      - tunnel
