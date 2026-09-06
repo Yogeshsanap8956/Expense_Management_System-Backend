@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from urllib.parse import quote
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, require_roles
@@ -27,3 +29,19 @@ def create_announcement(
     db.commit()
     db.refresh(item)
     return item
+
+
+@router.get("/{announcement_id}/share")
+def share_announcement(
+    announcement_id: int,
+    _: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    item = db.query(Announcement).filter(Announcement.id == announcement_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    message = (
+        f"📢 {item.title}\n\n{item.body}\n\n"
+        "— श्री गणेश मित्र मंडळ 🙏"
+    )
+    return {"whatsapp_url": f"https://wa.me/?text={quote(message)}", "message": message}

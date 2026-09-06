@@ -124,12 +124,24 @@ class EventCreate(BaseModel):
     status: str = "planned"
 
 
+class EventUpdate(BaseModel):
+    title: Optional[str] = None
+    event_date: Optional[date] = None
+    event_time: Optional[str] = None
+    location: Optional[str] = None
+    responsible_person: Optional[str] = None
+    volunteers: Optional[str] = None
+    budget: Optional[float] = None
+    status: Optional[str] = None
+
+
 class EventOut(BaseModel):
     model_config = ConfigDict(from_attributes=True, use_enum_values=True)
 
     id: int
     title: str
     event_date: date
+    event_time: Optional[str] = None
     location: Optional[str]
     responsible_person: Optional[str]
     volunteers: Optional[str]

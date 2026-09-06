@@ -15,7 +15,8 @@ from app.models.expense import Expense
 from app.models.mahaprasad import Mahaprasad
 from app.models.user import User
 from app.models.vargani import Vargani
-from app.schemas.common import AnnouncementOut, DashboardOut, EventOut
+from app.api.v1.events import serialize_event
+from app.schemas.common import AnnouncementOut, DashboardOut
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
@@ -63,6 +64,6 @@ def dashboard(_: User = Depends(get_current_user), db: Session = Depends(get_db)
         today_evening_aarti=evening.start_time.strftime("%I:%M %p") if evening else None,
         today_mahaprasad=prasad.distribution_time.strftime("%I:%M %p") if prasad and prasad.distribution_time else None,
         today_aarti_members=aarti_count,
-        upcoming_events=[EventOut.model_validate(event) for event in events],
+        upcoming_events=[serialize_event(event) for event in events],
         announcements=[AnnouncementOut.model_validate(item) for item in announcements],
     )
