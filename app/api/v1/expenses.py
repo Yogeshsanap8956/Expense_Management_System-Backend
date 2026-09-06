@@ -7,7 +7,7 @@ from app.core.enums import ExpenseCategory, UserRole
 from app.db.session import get_db
 from app.models.expense import Expense
 from app.models.user import User
-from app.schemas.common import ExpenseCreate, ExpenseOut
+from app.schemas.common import ExpenseCreate, ExpenseOut, ExpenseUpdate
 
 router = APIRouter(prefix="/expenses", tags=["expenses"])
 
@@ -40,6 +40,23 @@ def create_expense(
         paid_by_id=current.id,
     )
     db.add(expense)
+    db.commit()
+    db.refresh(expense)
+    return expense
+
+
+@router.patch("/{expense_id}", response_model=ExpenseOut)
+def update_expense(
+    expense_id: int,
+    payload: ExpenseUpdate,
+    _: User = Depends(require_roles(UserRole.TREASURER)),
+    db: Session = Depends(get_db),
+):
+    expense = db.query(Expense).filter(Expense.id == expense_id).first()
+    if not expense:
+        raise HTTPException(status_code=404, detail="Expense not found")
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(expense, field, value)
     db.commit()
     db.refresh(expense)
     return expense
