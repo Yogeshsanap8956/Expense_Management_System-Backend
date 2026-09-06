@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1 import api_router
 from app.core.config import settings
 from app.db.base import Base
-from app.db.seed import seed_if_empty
+from app.db.seed import ensure_festival_aarti_slots, seed_if_empty
 from app.db.session import SessionLocal, engine
 
 app = FastAPI(title=settings.app_name, version="0.1.0")
@@ -24,6 +24,7 @@ def on_startup():
     db = SessionLocal()
     try:
         seed_if_empty(db)
+        ensure_festival_aarti_slots(db)
     finally:
         db.close()
 

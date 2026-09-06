@@ -23,6 +23,7 @@ class AartiSlot(Base):
 
 class AartiAssignment(Base):
     __tablename__ = "aarti_assignments"
+    __table_args__ = (UniqueConstraint("slot_id", "member_id", name="uq_assignment_slot_member"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     slot_id: Mapped[int] = mapped_column(ForeignKey("aarti_slots.id"))

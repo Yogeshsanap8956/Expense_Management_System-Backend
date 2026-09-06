@@ -144,6 +144,16 @@ class AvailabilityUpdate(BaseModel):
     available: bool
 
 
+class AartiAssignRequest(BaseModel):
+    member_ids: list[int]
+
+
+class AartiDayCreate(BaseModel):
+    slot_date: date
+    morning_time: str = "06:30"
+    evening_time: str = "19:30"
+
+
 class MahaprasadCreate(BaseModel):
     prasad_date: date
     menu: str
