@@ -157,3 +157,43 @@ def ensure_festival_aarti_slots(db: Session) -> None:
         changed = True
     if changed:
         db.commit()
+
+
+def ensure_festival_mahaprasad(db: Session) -> None:
+    extras = [
+        (
+            date(2026, 9, 7),
+            "Rice, Dal, Potato Bhaji, Salad, Shrikhand",
+            350,
+            "Ramesh, Suresh, Akshay, Prasad",
+            12000,
+            time(13, 0),
+        ),
+        (
+            date(2026, 9, 8),
+            "Puran Poli, Kadhi, Rice, Salad",
+            300,
+            "Akshay, Prasad",
+            10000,
+            time(13, 0),
+        ),
+    ]
+    changed = False
+    for prasad_date, menu, people, team, budget, dist in extras:
+        if db.query(Mahaprasad).filter(Mahaprasad.prasad_date == prasad_date).first():
+            continue
+        db.add(
+            Mahaprasad(
+                prasad_date=prasad_date,
+                menu=menu,
+                expected_people=people,
+                cooking_team=team,
+                serving_team=team,
+                food_budget=budget,
+                distribution_time=dist,
+                food_quantity=f"{people} plates",
+            )
+        )
+        changed = True
+    if changed:
+        db.commit()
