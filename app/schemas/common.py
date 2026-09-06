@@ -75,6 +75,12 @@ class ExpenseCreate(BaseModel):
     notes: Optional[str] = None
 
 
+class ExpenseUpdate(BaseModel):
+    bill_url: Optional[str] = None
+    payment_screenshot_url: Optional[str] = None
+    notes: Optional[str] = None
+
+
 class ExpenseOut(BaseModel):
     model_config = ConfigDict(from_attributes=True, use_enum_values=True)
 
