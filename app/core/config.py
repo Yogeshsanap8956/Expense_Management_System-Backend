@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24 * 7
     database_url: str = "sqlite:///./mandal.db"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
-    cors_origin_regex: str = r"https://.*\.pages\.dev"
+    cors_origin_regex: str = r"https://.*\.(pages\.dev|workers\.dev)"
     upload_dir: str = "uploads"
     admin_phone: str = "9999999999"
     admin_password: str = "admin123"
